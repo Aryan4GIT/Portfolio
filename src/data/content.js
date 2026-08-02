@@ -65,11 +65,11 @@ export const experience = [
 
 export const projects = [
   {
-    title: "Medlen",
+    title: "Medlen-AI",
     client: "Personal",
     kind: "AI · Full-Stack",
     year: "2026",
-    repo: "https://github.com/Aryan4GIT/Medlen",
+    repo: "https://github.com/Aryan4GIT/MedLen-AI",
     description:
       "An AI-assisted tool for medical reports — upload a report and get a plain-language diagnosis summary, plus a list of questions worth asking your doctor. A RAG pipeline grounds the output in the report itself instead of guessing free-form.",
     tags: ["Go", "React", "MongoDB", "AWS", "RAG"],
