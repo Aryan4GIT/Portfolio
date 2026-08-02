@@ -11,10 +11,27 @@ const item = {
   show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] } },
 }
 
+// Keeps the subject on the right and dissolves the photo everywhere else, so the
+// headline column on the left stays fully legible over it.
+const HERO_FADE =
+  "radial-gradient(ellipse 52% 95% at 78% 48%, #000 28%, rgba(0,0,0,0.55) 56%, transparent 80%)"
+
 export default function Hero() {
   return (
-    <section id="top" className="relative flex min-h-[100svh] items-center px-6 pt-28 pb-16">
-      <div className="mx-auto w-full max-w-5xl">
+    <section
+      id="top"
+      className="relative flex min-h-[100svh] items-center overflow-hidden px-6 pt-28 pb-16"
+    >
+      <img
+        src={profile.photo}
+        alt=""
+        aria-hidden
+        fetchPriority="high"
+        className="pointer-events-none absolute inset-0 h-full w-full select-none object-cover object-[72%_46%] opacity-[0.18] grayscale contrast-[1.15] md:opacity-90"
+        style={{ maskImage: HERO_FADE, WebkitMaskImage: HERO_FADE }}
+      />
+
+      <div className="relative mx-auto w-full max-w-5xl">
         <motion.div variants={container} initial="hidden" animate="show">
           <motion.div variants={item} className="mb-6 flex items-center gap-2">
             <span className="relative flex h-2 w-2">

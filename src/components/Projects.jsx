@@ -1,5 +1,5 @@
 import { Reveal, SectionHeading } from "./Reveal"
-import { ArrowUpRight, Sparkles } from "lucide-react"
+import { ArrowUpRight, Github, Sparkles } from "lucide-react"
 import { projects } from "../data/content"
 
 export default function Projects() {
@@ -33,10 +33,22 @@ export default function Projects() {
                     </h3>
                     <div className="mt-0.5 text-sm text-[var(--color-violet)]">{p.client}</div>
                   </div>
-                  <ArrowUpRight
-                    size={20}
-                    className="flex-shrink-0 text-[var(--color-faint)] transition-all group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-[var(--color-ink)]"
-                  />
+                  {p.repo && (
+                    <a
+                      href={p.repo}
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label={`${p.title} source code on GitHub`}
+                      className="group/link relative z-10 inline-flex flex-shrink-0 items-center gap-1.5 rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] px-2.5 py-1.5 font-mono text-[0.7rem] text-[var(--color-muted)] transition-colors hover:border-[var(--color-violet)] hover:text-[var(--color-ink)]"
+                    >
+                      <Github size={14} />
+                      Code
+                      <ArrowUpRight
+                        size={12}
+                        className="transition-transform group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5"
+                      />
+                    </a>
+                  )}
                 </div>
 
                 <p className="mt-4 flex-1 text-sm leading-relaxed text-[var(--color-muted)]">
