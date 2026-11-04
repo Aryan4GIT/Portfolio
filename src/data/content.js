@@ -69,6 +69,21 @@ export const experience = [
 // `to` is who the project is for. `sort` decides which chutes it appears in: ai, backend, web.
 export const projects = [
   {
+    title: "LeadFinder",
+    to: "Anyone selling to local businesses",
+    kind: "AI, SaaS",
+    sort: ["ai", "backend"],
+    year: "2026",
+    repo: "https://github.com/Aryan4GIT/LeadFinderAI",
+    live: "https://web-production-84d97.up.railway.app/",
+    image: "/work/leadfinder.jpg",
+    description:
+      "Tells you which businesses are worth contacting, and why. It searches Google Places and Hunter by category and radius, merges duplicates, enriches what's left, then scores each business from 0 to 100: half hard signals like reviews, rating and whether it has a website, half Gemini reading it against what you sell. The result is a ranked call list you can export or send straight into a campaign.",
+    tags: ["React", "Gemini", "Google Places", "Hunter", "Clerk", "Railway"],
+    highlights: ["Every score comes with a reason", "Cheap filters run before AI spend", "Email paced against a suppression list"],
+    featured: true,
+  },
+  {
     title: "Medlen-AI",
     to: "Patients trying to read their own reports",
     kind: "AI, full-stack",
