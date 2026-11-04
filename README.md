@@ -33,6 +33,8 @@ src/data/content.js
 
 Update the values there and the whole site updates. No need to touch the components.
 
+Project screenshots live in `public/work/`. Run `npm test` after editing to catch a missing image or a broken project entry.
+
 ## Structure
 
 ```

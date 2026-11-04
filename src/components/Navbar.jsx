@@ -4,43 +4,43 @@ import { Menu, X } from "lucide-react"
 import { navLinks, profile } from "../data/content"
 
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false)
+  const [active, setActive] = useState(null)
   const [open, setOpen] = useState(false)
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24)
-    onScroll()
-    window.addEventListener("scroll", onScroll, { passive: true })
-    return () => window.removeEventListener("scroll", onScroll)
+    const spy = new IntersectionObserver(
+      (entries) => {
+        const seen = entries.find((e) => e.isIntersecting)
+        if (seen) setActive(`#${seen.target.id}`)
+      },
+      { rootMargin: "-45% 0px -50% 0px" },
+    )
+    document.querySelectorAll("main section[id]").forEach((s) => spy.observe(s))
+    return () => spy.disconnect()
   }, [])
 
   return (
-    <motion.header
-      initial={{ y: -80, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-      className="fixed inset-x-0 top-0 z-50 flex justify-center px-4 pt-4"
-    >
-      <nav
-        className={`flex w-full max-w-5xl items-center justify-between rounded-2xl border px-4 py-3 transition-all duration-300 sm:px-6 ${
-          scrolled ? "glass border-[var(--color-border)] shadow-lg shadow-black/20" : "border-transparent"
-        }`}
-      >
-        <a href="#top" className="group flex items-center gap-2.5">
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-[var(--color-violet)] to-[var(--color-mint)] font-display text-sm font-bold text-[#0a0a0b]">
-            A
-          </span>
-          <span className="font-display text-sm font-semibold tracking-tight text-[var(--color-ink)]">
-            Aryan<span className="text-[var(--color-faint)]"> Singh</span>
-          </span>
+    <header className="label fixed inset-x-0 top-0 z-50">
+      <nav className="mx-auto flex h-14 max-w-7xl items-center justify-between px-5">
+        <a href="#top" className="font-display text-3xl font-black uppercase leading-none" aria-label={`${profile.name}, back to top`}>
+          AKS
         </a>
 
         <ul className="hidden items-center gap-1 md:flex">
           {navLinks.map((link) => (
-            <li key={link.href}>
+            <li key={link.href} className="relative">
+              {active === link.href && (
+                <motion.span
+                  layoutId="nav-mark"
+                  aria-hidden
+                  className="absolute inset-0 rounded-sm border-2 border-stamp-red"
+                  transition={{ type: "spring", stiffness: 420, damping: 32 }}
+                />
+              )}
               <a
                 href={link.href}
-                className="rounded-lg px-3 py-2 text-sm text-[var(--color-muted)] transition-colors hover:text-[var(--color-ink)]"
+                aria-current={active === link.href ? "true" : undefined}
+                className="relative block px-3 pb-1 pt-1.5 font-semibold hover:text-stamp-red"
               >
                 {link.label}
               </a>
@@ -48,38 +48,38 @@ export default function Navbar() {
           ))}
         </ul>
 
-        <div className="hidden md:block">
-          <a
-            href={`mailto:${profile.email}`}
-            className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] px-4 py-2 text-sm font-medium text-[var(--color-ink)] transition-colors hover:border-[var(--color-violet)]"
-          >
-            Let's talk
-          </a>
-        </div>
+        <a
+          href={`mailto:${profile.email}`}
+          className="hidden bg-ink px-4 pb-1.5 pt-2 font-semibold leading-none text-label hover:bg-stamp-red md:block"
+        >
+          Email me
+        </a>
 
         <button
+          type="button"
           onClick={() => setOpen((v) => !v)}
-          className="rounded-lg border border-[var(--color-border)] p-2 text-[var(--color-ink)] md:hidden"
-          aria-label="Toggle menu"
+          aria-label={open ? "Close menu" : "Open menu"}
+          aria-expanded={open}
+          className="p-2 md:hidden"
         >
-          {open ? <X size={18} /> : <Menu size={18} />}
+          {open ? <X size={22} /> : <Menu size={22} />}
         </button>
       </nav>
 
       <AnimatePresence>
         {open && (
           <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            className="glass absolute top-20 w-[calc(100%-2rem)] max-w-5xl rounded-2xl border border-[var(--color-border)] p-3 md:hidden"
+            initial={{ height: 0 }}
+            animate={{ height: "auto" }}
+            exit={{ height: 0 }}
+            className="overflow-hidden border-t-2 md:hidden"
           >
             {navLinks.map((link) => (
               <a
                 key={link.href}
                 href={link.href}
                 onClick={() => setOpen(false)}
-                className="block rounded-lg px-4 py-3 text-sm text-[var(--color-muted)] transition-colors hover:bg-[var(--color-surface-2)] hover:text-[var(--color-ink)]"
+                className="block px-5 py-3 text-lg font-semibold active:text-stamp-red"
               >
                 {link.label}
               </a>
@@ -87,13 +87,13 @@ export default function Navbar() {
             <a
               href={`mailto:${profile.email}`}
               onClick={() => setOpen(false)}
-              className="mt-1 block rounded-lg bg-gradient-to-r from-[var(--color-violet)] to-[var(--color-mint)] px-4 py-3 text-center text-sm font-semibold text-[#0a0a0b]"
+              className="block bg-ink px-5 py-3 text-lg font-semibold text-label"
             >
-              Let's talk
+              Email me
             </a>
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.header>
+    </header>
   )
 }

@@ -1,82 +1,118 @@
-import { Reveal, SectionHeading } from "./Reveal"
-import { ArrowUpRight, Github, Sparkles } from "lucide-react"
+import { useState } from "react"
+import { AnimatePresence, motion } from "framer-motion"
+import { ExternalLink, Github } from "lucide-react"
+import { Barcode, SectionHeading } from "./Parcel"
 import { projects } from "../data/content"
 
-export default function Projects() {
+const CHUTES = [
+  { label: "Everything", has: () => true },
+  { label: "AI", has: (p) => p.sort.includes("ai") },
+  { label: "Backend and full-stack", has: (p) => p.sort.includes("backend") },
+  { label: "Business websites", has: (p) => p.sort.includes("web") },
+  { label: "Live now", has: (p) => p.live },
+]
+
+const TILT = [-1.1, 0.7, -0.4, 1, -0.8, 0.5, 1.2]
+
+export function ProjectLinks({ p }) {
+  const style = "relative z-10 inline-flex items-center gap-1.5 border-2 px-2.5 pb-1 pt-1.5 text-sm font-bold leading-none hover:bg-ink hover:text-label"
   return (
-    <section id="work" className="relative px-6 py-24 md:py-32">
-      <div className="mx-auto max-w-5xl">
-        <SectionHeading eyebrow="03 — Selected Work" title="Things I've built" />
+    <div className="flex flex-wrap gap-2">
+      {p.live && (
+        <a href={p.live} target="_blank" rel="noreferrer" aria-label={`${p.title} live site`} className={style}>
+          <ExternalLink size={14} /> Live site
+        </a>
+      )}
+      <a href={p.repo} target="_blank" rel="noreferrer" aria-label={`${p.title} code on GitHub`} className={style}>
+        <Github size={14} /> Code
+      </a>
+    </div>
+  )
+}
 
-        <div className="grid gap-5 md:grid-cols-2">
-          {projects.map((p, i) => (
-            <Reveal key={p.title} delay={(i % 2) * 0.08} className={p.featured ? "md:col-span-1" : ""}>
-              <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6 card-hover">
-                {p.featured && (
-                  <span
-                    aria-hidden
-                    className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full opacity-20 blur-3xl transition-opacity group-hover:opacity-40"
-                    style={{ background: "radial-gradient(circle, #8b7cff, transparent 70%)" }}
-                  />
-                )}
+export default function Projects({ onOpen }) {
+  const [chute, setChute] = useState(CHUTES[0])
+  const shown = projects.filter(chute.has)
 
-                <div className="flex items-start justify-between gap-4">
-                  <div>
-                    <div className="flex items-center gap-2">
-                      {p.featured && <Sparkles size={14} className="text-[var(--color-mint)]" />}
-                      <span className="font-mono text-[0.7rem] uppercase tracking-widest text-[var(--color-faint)]">
-                        {p.kind} · {p.year}
-                      </span>
-                    </div>
-                    <h3 className="mt-2 font-display text-xl font-semibold text-[var(--color-ink)]">
-                      {p.title}
-                    </h3>
-                    <div className="mt-0.5 text-sm text-[var(--color-violet)]">{p.client}</div>
-                  </div>
-                  {p.repo && (
-                    <a
-                      href={p.repo}
-                      target="_blank"
-                      rel="noreferrer"
-                      aria-label={`${p.title} source code on GitHub`}
-                      className="group/link relative z-10 inline-flex flex-shrink-0 items-center gap-1.5 rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] px-2.5 py-1.5 font-mono text-[0.7rem] text-[var(--color-muted)] transition-colors hover:border-[var(--color-violet)] hover:text-[var(--color-ink)]"
-                    >
-                      <Github size={14} />
-                      Code
-                      <ArrowUpRight
-                        size={12}
-                        className="transition-transform group-hover/link:-translate-y-0.5 group-hover/link:translate-x-0.5"
-                      />
-                    </a>
-                  )}
-                </div>
+  return (
+    <section id="work" className="fold px-5 py-20 md:py-28">
+      <div className="mx-auto max-w-7xl">
+        <SectionHeading title="Things I've built" note="Pick a chute to sort the pile. Open any label for the full story." />
 
-                <p className="mt-4 flex-1 text-sm leading-relaxed text-[var(--color-muted)]">
-                  {p.description}
-                </p>
-
-                <div className="mt-5 flex flex-wrap gap-1.5">
-                  {p.highlights.map((h) => (
-                    <span
-                      key={h}
-                      className="rounded-md bg-[var(--color-violet)]/10 px-2 py-1 text-[0.7rem] font-medium text-[var(--color-violet)]"
-                    >
-                      {h}
-                    </span>
-                  ))}
-                </div>
-
-                <div className="mt-4 flex flex-wrap gap-2 border-t border-[var(--color-border)] pt-4">
-                  {p.tags.map((t) => (
-                    <span key={t} className="font-mono text-[0.7rem] text-[var(--color-faint)]">
-                      {t}
-                    </span>
-                  ))}
-                </div>
-              </article>
-            </Reveal>
+        <div role="group" aria-label="Sort projects" className="mb-10 flex flex-wrap gap-2">
+          {CHUTES.map((c) => (
+            <button
+              key={c.label}
+              type="button"
+              aria-pressed={c === chute}
+              onClick={() => setChute(c)}
+              className={`border-2 px-4 pb-1.5 pt-2 font-bold leading-none ${c === chute ? "bg-ink text-label" : "hover:bg-ink/10"}`}
+            >
+              {c.label} <span className="font-normal tabular-nums">{projects.filter(c.has).length}</span>
+            </button>
           ))}
         </div>
+        <p aria-live="polite" className="sr-only">
+          {shown.length} projects shown
+        </p>
+
+        <motion.div layout="position" className="grid items-start gap-7 md:grid-cols-2 lg:grid-cols-3">
+          <AnimatePresence initial={false} mode="popLayout">
+            {shown.map((p) => (
+              <motion.article
+                key={p.title}
+                layout="position"
+                initial={{ opacity: 0, y: -40, rotate: -6 }}
+                animate={{ opacity: 1, y: 0, rotate: TILT[projects.indexOf(p) % TILT.length] }}
+                exit={{ opacity: 0, y: 60, rotate: 8, scale: 0.92, transition: { duration: 0.2 } }}
+                whileHover={{ y: -6, rotate: 0 }}
+                transition={{ type: "spring", stiffness: 300, damping: 26 }}
+                className="label relative flex flex-col"
+              >
+                {p.image && (
+                  <img
+                    src={p.image}
+                    alt={`${p.title} homepage`}
+                    loading="lazy"
+                    width="960"
+                    height="600"
+                    className="aspect-[8/5] w-full border-b-2 object-cover object-top"
+                  />
+                )}
+                <div className="flex flex-1 flex-col p-5">
+                  <div className="flex items-start justify-between gap-3">
+                    <h3 className="min-w-0">
+                      <button
+                        type="button"
+                        onClick={() => onOpen(p)}
+                        className="text-left font-display text-4xl font-black uppercase leading-[0.95] after:absolute after:inset-0 hover:text-stamp-red"
+                      >
+                        {p.title}
+                      </button>
+                    </h3>
+                    <span className="pt-1 font-semibold tabular-nums">{p.year}</span>
+                  </div>
+                  <p className="mt-2 leading-snug">
+                    <span className="font-bold">To</span> {p.to}
+                  </p>
+                  <p className={`mt-3 leading-relaxed text-soft ${p.image ? "line-clamp-3" : "line-clamp-5"}`}>{p.description}</p>
+                  {!p.image && (
+                    <ul className="mt-3 list-disc pl-5 font-semibold leading-snug">
+                      {p.highlights.map((h) => (
+                        <li key={h}>{h}</li>
+                      ))}
+                    </ul>
+                  )}
+                  <p className="mb-4 mt-3 text-sm font-semibold">{p.tags.join(", ")}</p>
+                  <div className="mt-auto flex items-end justify-between gap-4 border-t-2 pt-3">
+                    <Barcode text={p.repo} className="h-8 w-20 flex-shrink-0" />
+                    <ProjectLinks p={p} />
+                  </div>
+                </div>
+              </motion.article>
+            ))}
+          </AnimatePresence>
+        </motion.div>
       </div>
     </section>
   )

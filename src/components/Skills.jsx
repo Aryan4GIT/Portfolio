@@ -1,56 +1,82 @@
-import { Reveal, SectionHeading } from "./Reveal"
-import { skills, achievements } from "../data/content"
-import { Award } from "lucide-react"
+import { useState } from "react"
+import { Barcode, SectionHeading, Stamp } from "./Parcel"
+import { achievements, skills, usedIn } from "../data/content"
 
-export default function Skills() {
+export default function Skills({ onOpen }) {
+  const [scanned, setScanned] = useState(null)
+  const total = skills.reduce((n, s) => n + s.items.length, 0)
+
   return (
-    <section id="skills" className="relative px-6 py-24 md:py-32">
-      <div className="mx-auto max-w-5xl">
-        <SectionHeading eyebrow="04 — Toolkit" title="Skills & achievements" />
+    <section id="skills" className="fold px-5 py-20 md:py-28">
+      <div className="mx-auto grid max-w-6xl items-start gap-14 lg:grid-cols-[24rem_minmax(0,1fr)]">
+        <div className="receipt label lg:-rotate-1">
+          <div className="p-5">
+            <p className="text-center font-display text-4xl font-black uppercase leading-none">Toolkit</p>
+            <p className="mt-1 border-b-2 border-dashed pb-3 text-center text-sm">Select an underlined item to see where it was used</p>
 
-        <div className="grid gap-4 sm:grid-cols-2">
-          {skills.map((s, i) => (
-            <Reveal key={s.group} delay={(i % 2) * 0.06}>
-              <div className="h-full rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-6 card-hover">
-                <h3 className="font-mono text-xs uppercase tracking-[0.2em] text-[var(--color-mint)]">
-                  {s.group}
-                </h3>
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {s.items.map((item) => (
-                    <span
-                      key={item}
-                      className="rounded-lg border border-[var(--color-border)] bg-[var(--color-bg)] px-3 py-1.5 text-sm text-[var(--color-ink)] transition-colors hover:border-[var(--color-violet)]"
-                    >
-                      {item}
-                    </span>
-                  ))}
-                </div>
+            {skills.map((s) => (
+              <div key={s.group} className="mt-4">
+                <h3 className="font-bold">{s.group}</h3>
+                <ul>
+                  {s.items.map((item) => {
+                    const used = usedIn(item)
+                    return (
+                      <li key={item}>
+                        {used.length > 0 ? (
+                          <button
+                            type="button"
+                            aria-expanded={scanned === item}
+                            onClick={() => setScanned(scanned === item ? null : item)}
+                            className={`flex w-full justify-between gap-3 px-1 text-left leading-7 ${scanned === item ? "bg-ink text-label" : "underline decoration-dotted underline-offset-4 hover:text-stamp-red"}`}
+                          >
+                            <span>{item}</span>
+                            <span className="tabular-nums">x{used.length}</span>
+                          </button>
+                        ) : (
+                          <span className="block px-1 leading-7">{item}</span>
+                        )}
+                        {scanned === item && (
+                          <ul className="mb-1 border-x-2 border-b-2 px-2 py-1 text-sm">
+                            {used.map((p) => (
+                              <li key={p.title}>
+                                <button type="button" onClick={() => onOpen(p)} className="text-left font-semibold leading-6 underline underline-offset-2 hover:text-stamp-red">
+                                  {p.title}
+                                </button>
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </li>
+                    )
+                  })}
+                </ul>
               </div>
-            </Reveal>
-          ))}
+            ))}
+
+            <div className="mt-4 flex justify-between border-t-2 border-dashed pt-3 font-bold">
+              <span>Total</span>
+              <span className="tabular-nums">{total} tools</span>
+            </div>
+            <Barcode text="thanks for reading this far" className="mt-4 h-10 w-full" />
+            <p className="mt-2 text-center text-sm">Thanks for reading this far</p>
+          </div>
         </div>
 
-        <div className="mt-4 grid gap-4 sm:grid-cols-2">
-          {achievements.map((a, i) => (
-            <Reveal key={a.title} delay={(i % 2) * 0.06}>
-              <div className="flex h-full items-start gap-4 rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface)] p-5 card-hover">
-                <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-[var(--color-violet)]/20 to-[var(--color-mint)]/20 text-[var(--color-mint)]">
-                  <Award size={18} />
-                </span>
+        <div className="lg:sticky lg:top-24">
+          <SectionHeading title="Skills and achievements" />
+          <ul className="space-y-8">
+            {achievements.map((a, i) => (
+              <li key={a.title} className="grid items-center gap-x-6 gap-y-2 sm:grid-cols-[10rem_minmax(0,1fr)]">
+                <Stamp inView delay={i * 0.08} rotate={i % 2 ? 4 : -5} className="w-fit text-3xl">
+                  {a.badge}
+                </Stamp>
                 <div>
-                  <div className="flex flex-wrap items-center gap-2">
-                    <h4 className="font-display text-sm font-semibold text-[var(--color-ink)]">
-                      {a.title}
-                    </h4>
-                    <span className="rounded-full bg-[var(--color-violet)]/12 px-2 py-0.5 font-mono text-[0.6rem] uppercase tracking-wider text-[var(--color-violet)]">
-                      {a.badge}
-                    </span>
-                  </div>
-                  <p className="mt-1 text-sm leading-relaxed text-[var(--color-muted)]">{a.detail}</p>
+                  <h3 className="text-xl font-bold leading-snug">{a.title}</h3>
+                  <p className="mt-1 max-w-[60ch] leading-relaxed">{a.detail}</p>
                 </div>
-              </div>
-            </Reveal>
-          ))}
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </section>

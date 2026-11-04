@@ -20,7 +20,7 @@ export const about = {
   ],
   facts: [
     { label: "Based in", value: "Chennai, IN" },
-    { label: "Focus", value: "Backend · Cloud · AI" },
+    { label: "Focus", value: "Backend, cloud and AI" },
     { label: "Education", value: "B.Tech CSE, VIT" },
     { label: "Status", value: "Joining Prodapt" },
   ],
@@ -32,6 +32,7 @@ export const experience = [
     role: "Software Developer",
     period: "2026 — Incoming",
     location: "India",
+    scan: "Out for delivery",
     accent: true,
     points: [
       "Joining as a Software Developer to build and scale connectedness-industry software products.",
@@ -43,6 +44,7 @@ export const experience = [
     role: "Software Development Engineer Intern",
     period: "May 2025 — Aug 2025",
     location: "India",
+    scan: "In transit",
     points: [
       "Designed and shipped 10+ secure RESTful APIs using JWT authentication and role-based access control, hardening application security and user authorization.",
       "Cut average API response time by 30%+ through database query tuning and caching strategies.",
@@ -55,6 +57,7 @@ export const experience = [
     role: "Full-Stack Developer",
     period: "2024 — Present",
     location: "Remote",
+    scan: "Picked up",
     points: [
       "Built and automated the billing system for Sri Ganesh Enterprises courier company — GST-accurate invoicing packaged as a single-executable desktop app.",
       "Designed and developed a conversion-focused landing page for Arcus Stays, a Ghaziabad PG.",
@@ -63,25 +66,30 @@ export const experience = [
   },
 ]
 
+// `to` is who the project is for. `sort` decides which chutes it appears in: ai, backend, web.
 export const projects = [
   {
     title: "Medlen-AI",
-    client: "Personal",
-    kind: "AI · Full-Stack",
+    to: "Patients trying to read their own reports",
+    kind: "AI, full-stack",
+    sort: ["ai", "backend"],
     year: "2026",
     repo: "https://github.com/Aryan4GIT/MedLen-AI",
     description:
-      "An AI-assisted tool for medical reports — upload a report and get a plain-language diagnosis summary, plus a list of questions worth asking your doctor. A RAG pipeline grounds the output in the report itself instead of guessing free-form.",
-    tags: ["Go", "React", "MongoDB", "AWS", "RAG"],
-    highlights: ["Report diagnosis", "Suggested doctor questions", "RAG-grounded"],
+      "Upload a medical report and get it explained in plain English, with questions worth asking your doctor. OCR pulls out the biomarkers, then a RAG step retrieves medical references. Citations are built from those retrieved chunks rather than from model output, and the analysis is refused when no reference backs it up.",
+    tags: ["Go (Gin)", "React", "TypeScript", "MongoDB Atlas", "AWS S3", "RAG", "Docker", "JWT"],
+    highlights: ["Citations from retrieved chunks", "Four-step OCR fallback", "Virus-scanned uploads"],
     featured: true,
   },
   {
     title: "OmniMind",
-    client: "Personal",
-    kind: "AI · Full-Stack",
+    to: "Anyone working through a stack of PDFs",
+    kind: "AI, full-stack",
+    sort: ["ai"],
     year: "2026",
     repo: "https://github.com/Aryan4GIT/Omni-mind",
+    live: "https://omni-mind.onrender.com/",
+    image: "/work/omnimind.jpg",
     description:
       "Three tools over your own material: live speech-to-text, grounded Q&A over documents you drop in, and a three-agent loop that drafts a brief then fact-checks it against those same sources. PDFs are chunked per page and ranked with BM25, so every answer cites a page you can actually turn to — and \"not in this document\" comes back as a real answer instead of a hallucination.",
     tags: ["React 19", "Express", "Gemini", "BM25", "pdf.js"],
@@ -89,9 +97,83 @@ export const projects = [
     featured: true,
   },
   {
+    title: "Gap Stealer",
+    to: "Day workers and hirers in Chennai",
+    kind: "Full-stack",
+    sort: ["backend"],
+    year: "2026",
+    repo: "https://github.com/Aryan4GIT/gapstealers",
+    description:
+      "A public board for day work in Chennai. Every posting prints its rate and the hirer's own phone number, and nothing is taken from the pay. Firestore security rules do the access control rather than the client: anyone can read jobs, only a signed-in account can post, and applications can't be edited afterwards.",
+    tags: ["React", "Redux Toolkit", "Firebase", "Firestore"],
+    highlights: ["Rules-enforced access", "Strict CSP", "Works without a backend on sample data"],
+    featured: false,
+  },
+  {
+    title: "Motherland Group",
+    to: "Motherland Group, Bangalore and Chennai",
+    kind: "Website",
+    sort: ["web"],
+    year: "2026",
+    repo: "https://github.com/Aryan4GIT/motherland",
+    live: "https://motherland-nine.vercel.app",
+    image: "/work/motherland.jpg",
+    description:
+      "A multi-page site for a garment-washing and denim group, covering its three divisions. One Python script generates every page and fails the build if a link points to a file or anchor that doesn't exist. The output is plain HTML that any static host can serve, and the palette comes from a pair of jeans: indigo washes, tan topstitch and a red tab.",
+    tags: ["Python", "HTML", "CSS", "JavaScript"],
+    highlights: ["Build fails on broken links", "No runtime dependencies", "Phone-first layouts"],
+    featured: true,
+  },
+  {
+    title: "Mantan Supermart",
+    to: "Mantan Supermart, New Delhi",
+    kind: "Storefront",
+    sort: ["web"],
+    year: "2026",
+    repo: "https://github.com/Aryan4GIT/manthan",
+    live: "https://manthan-six.vercel.app",
+    image: "/work/mantan.jpg",
+    description:
+      "A storefront for a 20,000 sq ft grocery store. Browse categories, fill a cart that survives a refresh, and send the order as a pre-written WhatsApp message, so the shop confirms stock and the final bill without a payment system. Store details live in data files, and the catalogue is clearly marked as a sample until real stock goes in.",
+    tags: ["React 19", "TypeScript", "Tailwind CSS", "Framer Motion", "Radix"],
+    highlights: ["WhatsApp checkout", "Cart survives a refresh", "SEO data from one file"],
+    featured: true,
+  },
+  {
+    title: "SHOWMAQERS",
+    to: "SHOWMAQERS, Delhi NCR",
+    kind: "Website and admin",
+    sort: ["web", "backend"],
+    year: "2026",
+    repo: "https://github.com/Aryan4GIT/event",
+    live: "https://event-seven-azure.vercel.app",
+    image: "/work/showmaqers.jpg",
+    description:
+      "A site of 160+ pages for a wedding and event planner. Python tools crawl the existing site and generate the SEO landing pages, while a Supabase backend runs the artist roster, a roster admin screen, artist logins and media uploads.",
+    tags: ["JavaScript", "Supabase", "PostgreSQL", "Python", "SEO"],
+    highlights: ["160+ pages", "Roster admin", "Artist logins"],
+    featured: false,
+  },
+  {
+    title: "Soumya Events",
+    to: "Soumya Events and Entertainment, Delhi NCR",
+    kind: "Website",
+    sort: ["web"],
+    year: "2026",
+    repo: "https://github.com/Aryan4GIT/corporate_events",
+    live: "https://corporateevents-two.vercel.app",
+    image: "/work/soumya.jpg",
+    description:
+      "A site for a corporate events company, covering exhibitions, conferences, award functions and brand stands. Written in plain HTML, CSS and JavaScript with no framework, plus a small Python script that optimises the photos.",
+    tags: ["JavaScript", "HTML", "CSS", "Python"],
+    highlights: ["No framework", "Local business schema", "Optimised images"],
+    featured: false,
+  },
+  {
     title: "Courier Billing System",
-    client: "Sri Ganesh Enterprises",
-    kind: "Freelance · Live",
+    to: "Sri Ganesh Enterprises",
+    kind: "Freelance, in production",
+    sort: ["backend"],
     year: "2025",
     repo: "https://github.com/Aryan4GIT/Billing-System",
     description:
@@ -102,32 +184,35 @@ export const projects = [
   },
   {
     title: "Inventory Management System",
-    client: "Personal",
-    kind: "Full-Stack",
+    to: "An aluminium factory floor",
+    kind: "Full-stack",
+    sort: ["backend"],
     year: "2026",
     repo: "https://github.com/Aryan4GIT/Inventory-management",
     description:
       "Replaces spreadsheet-driven stock tracking for an aluminium manufacturing factory. Go (Gin + GORM) API with JWT auth and role-based access for managers, supervisors, and operators; a React + TypeScript dashboard covering stock movements, orders, reports, and low-stock alerts. Excel import/export so the floor can keep the workflow it already knows. Dockerised, SQLite today, PostgreSQL-ready.",
-    tags: ["Go (Gin)", "GORM", "React", "TypeScript", "Docker"],
+    tags: ["Go (Gin)", "GORM", "React", "TypeScript", "Docker", "JWT", "RBAC"],
     highlights: ["Role-based access", "Excel import/export", "Postgres-ready"],
-    featured: true,
+    featured: false,
   },
   {
     title: "SaaS Task Manager",
-    client: "Personal",
-    kind: "Backend · AI",
+    to: "Teams sharing one workspace",
+    kind: "Backend, AI",
+    sort: ["ai", "backend"],
     year: "2025",
     repo: "https://github.com/Aryan4GIT/Saas-Task-Manager",
     description:
       "A multi-tenant SaaS backend with organization-level data isolation across workspaces. JWT + RBAC for Admin, Manager, and Member roles, plus a LangChain RAG pipeline that generates contextual task summaries. Containerized and deployed on AWS EC2.",
-    tags: ["Go (Gin)", "PostgreSQL", "LangChain", "Docker", "AWS EC2"],
+    tags: ["Go (Gin)", "PostgreSQL", "LangChain", "Docker", "AWS EC2", "JWT", "RBAC"],
     highlights: ["Multi-tenant isolation", "RAG summaries", "RBAC"],
-    featured: true,
+    featured: false,
   },
   {
     title: "Ledger — Expense Tracker",
-    client: "Personal",
-    kind: "Full-Stack · Local-first",
+    to: "People who want their spending kept private",
+    kind: "Full-stack, local-first",
+    sort: ["backend"],
     year: "2026",
     repo: "https://github.com/Aryan4GIT/Smart-spending",
     description:
@@ -138,20 +223,22 @@ export const projects = [
   },
   {
     title: "Data Mapping Platform",
-    client: "Personal",
-    kind: "Full-Stack",
+    to: "Teams annotating large datasets",
+    kind: "Full-stack",
+    sort: ["backend"],
     year: "2025",
     repo: "https://github.com/Aryan4GIT/Data-Transformation-Platform",
     description:
       "A data annotation platform for managing datasets and annotation workflows. 10+ secure REST APIs for dataset upload, annotation assignment, and auth. Optimized indexing and backend logic cut API response time by 30%+ while scaling to large datasets.",
-    tags: ["Go", "React", "PostgreSQL", "Docker"],
+    tags: ["Go", "React", "PostgreSQL", "Docker", "REST APIs"],
     highlights: ["10+ REST APIs", "30%+ faster", "Scales to large datasets"],
     featured: false,
   },
   {
     title: "Arcus Stays Landing Page",
-    client: "Arcus Stays, Ghaziabad",
-    kind: "Freelance · Live",
+    to: "Arcus Stays, Ghaziabad",
+    kind: "Freelance",
+    sort: ["web"],
     year: "2024",
     repo: "https://github.com/Aryan4GIT/RamPG",
     description:
@@ -168,16 +255,20 @@ export const skills = [
     items: ["Go", "Python", "C++", "Java", "JavaScript", "SQL", "R"],
   },
   {
+    group: "Frontend",
+    items: ["React", "TypeScript", "Tailwind CSS", "Framer Motion"],
+  },
+  {
     group: "AI / ML",
-    items: ["RAG Pipelines", "LangChain", "Transformer Models", "Azure AI"],
+    items: ["RAG Pipelines", "LangChain", "Gemini", "Transformer Models", "Azure AI"],
   },
   {
     group: "Backend & Data",
-    items: ["REST APIs", "Microservices", "JWT", "RBAC", "PostgreSQL", "MongoDB", "Firebase"],
+    items: ["REST APIs", "Microservices", "JWT", "RBAC", "PostgreSQL", "MongoDB", "Firebase", "Supabase"],
   },
   {
     group: "DevOps & Tools",
-    items: ["Docker", "AWS EC2", "CI/CD", "Git / GitHub", "Postman"],
+    items: ["Docker", "AWS EC2", "AWS S3", "CI/CD", "Git / GitHub", "Postman"],
   },
 ]
 
@@ -211,3 +302,20 @@ export const navLinks = [
   { label: "Skills", href: "#skills" },
   { label: "Contact", href: "#contact" },
 ]
+
+// Whole names only, so "Go" finds "Go (Gin)" but not "GORM", and "React" finds "React 19".
+export const usedIn = (skill) => {
+  const s = skill.toLowerCase()
+  return projects.filter((p) =>
+    p.tags.some((tag) => {
+      const t = tag.toLowerCase()
+      return t === s || t.startsWith(`${s} `) || s.startsWith(`${t} `)
+    }),
+  )
+}
+
+export const waybillLink = (name, note) => {
+  const subject = `Hello from ${name.trim() || "your portfolio"}`
+  const body = name.trim() ? `${note.trim()}\n\n${name.trim()}` : note.trim()
+  return `mailto:${profile.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
+}
