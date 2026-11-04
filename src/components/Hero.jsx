@@ -22,7 +22,9 @@ export default function Hero({ onOpen }) {
   const box = useRef(null)
   const [marks, setMarks] = useState([])
   const [drops, setDrops] = useState(0)
-  const pile = projects.filter((p) => p.image && p.featured).concat(projects.find((p) => p.title === "Medlen-AI"))
+  // SPOTS[0] is the sender card, and a label without a spot would crash the page.
+  // Labels without an image go last: they're short enough for the bottom spot, and land on top.
+  const pile = projects.filter((p) => p.featured).slice(0, SPOTS.length - 1).sort((a, b) => !!b.image - !!a.image)
 
   const press = (e) => {
     if (e.target.closest("a, button")) return
@@ -47,7 +49,7 @@ export default function Hero({ onOpen }) {
       onClick={press}
       className="stampable relative min-h-[100svh] overflow-hidden px-5 pb-8 pt-20"
     >
-      <div className="mx-auto grid max-w-7xl items-center gap-8 lg:min-h-[calc(100svh-7rem)] lg:grid-cols-[minmax(0,1fr)_minmax(0,38rem)]">
+      <div className="mx-auto grid max-w-7xl items-center gap-8 xl:min-h-[calc(100svh-7rem)] xl:grid-cols-[minmax(0,1fr)_minmax(0,38rem)]">
         <div>
           <div className="relative w-fit">
             <h1 className="font-display text-[clamp(5.5rem,min(19vw,21vh),15rem)] font-black uppercase leading-[0.82]">
